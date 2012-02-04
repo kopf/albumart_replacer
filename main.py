@@ -24,8 +24,7 @@ def execute():
     """ Main program logic.
     """
     
-    mp3path = sys.argv[len(sys.argv) - 1] # c:\album\01 - song.mp3
-    dirpath = os.path.dirname(mp3path) # c:\album
+    dirpath = os.path.dirname(sys.argv[-1]) # c:\album
     orig_img_fpath = None # c:\album\folder.jpg
     filename = None # folder.jpg
     pixels = None # number of pixels in original image
