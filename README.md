@@ -9,8 +9,8 @@ It is most useful for automatically finding and saving higher-res copies of albu
 ## Installation and Configuration
 * [Download a copy of the Master branch.](https://bitbucket.org/ventolin/albumart_replacer/get/master.zip)
 * Install the requirements:
-** pip install PIL
-** pip install MultipartPostHandler
+	* pip install PIL
+	* pip install MultipartPostHandler
 * Unpack the files and edit the settings.py file. At the moment, this file contains just one variable to be edited: FILENAMES.
 This is a list of the files which the script will search for in the directory you pass it upon invokation. 
 The script follows the order of the list. Once it finds a file, it presumes it is the file which needs replacing and disregards the rest.
