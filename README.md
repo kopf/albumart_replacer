@@ -9,7 +9,7 @@ It is most useful for automatically finding and saving higher-res copies of albu
 ## Installation and Configuration
 * Download a copy of the Master branch of this project from the Downloads tab above. 
 * Unpack the files and edit the settings.py file. At the moment, this file contains just one variable to be edited: FILENAMES.
-These are the files which the script will search for in the directory you pass it upon invokation. 
+This is a list of the files which the script will search for in the directory you pass it upon invokation. 
 The script follows the order of the list. Once it finds a file, it presumes it is the file which needs replacing and disregards the others.
 
 ## Requirements:
