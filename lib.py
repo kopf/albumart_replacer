@@ -1,3 +1,4 @@
+import sys
 from ctypes import POINTER, byref, cdll, c_int, windll
 from ctypes.wintypes import LPCWSTR, LPWSTR
 
