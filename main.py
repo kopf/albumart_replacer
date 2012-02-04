@@ -3,39 +3,12 @@ from urllib import urlretrieve
 import urllib2, MultipartPostHandler
 from BeautifulSoup import BeautifulSoup
 
-def win32_unicode_argv():
-    """Uses shell32.GetCommandLineArgvW to get sys.argv as a list of Unicode
-    strings.
-
-    Versions 2.x of Python don't support Unicode in sys.argv on
-    Windows, with the underlying Windows API instead replacing multi-byte
-    characters with '?'.
-    """
-
-    from ctypes import POINTER, byref, cdll, c_int, windll
-    from ctypes.wintypes import LPCWSTR, LPWSTR
-
-    GetCommandLineW = cdll.kernel32.GetCommandLineW
-    GetCommandLineW.argtypes = []
-    GetCommandLineW.restype = LPCWSTR
-
-    CommandLineToArgvW = windll.shell32.CommandLineToArgvW
-    CommandLineToArgvW.argtypes = [LPCWSTR, POINTER(c_int)]
-    CommandLineToArgvW.restype = POINTER(LPWSTR)
-
-    cmd = GetCommandLineW()
-    argc = c_int(0)
-    argv = CommandLineToArgvW(cmd, byref(argc))
-    if argc.value > 0:
-        # Remove Python executable and commands if present
-        start = argc.value - len(sys.argv)
-        return [argv[i] for i in
-                xrange(start, argc.value)]
+from settings import FILENAMES
 
 def search(filepath):
     url = 'http://www.tineye.com/search'
-    # FIX FOR WINDOWS, PROBABLY BREAKS ON OTHER OPERATING SYSTEMS:
-    filepath = filepath.encode('cp1252')
+    if 'win' in sys.platform:
+        filepath = filepath.encode('cp1252')
     params = {'image': open(filepath, 'rb')}
     opener = urllib2.build_opener(MultipartPostHandler.MultipartPostHandler)
     urllib2.install_opener(opener)
@@ -45,23 +18,23 @@ def search(filepath):
     return followed.read().strip()
 
 def execute():
-    mp3path = sys.argv[len(sys.argv) - 1]
-    path = os.path.dirname(mp3path)
-    files = [u'front.jpg', u'cover.jpg', u'folder.jpg']
-    fullpath = None
-    filename = None
-    pixels = None
-    for file in files:
+    mp3path = sys.argv[len(sys.argv) - 1] # c:\album\01 - song.mp3
+    path = os.path.dirname(mp3path) # c:\album
+    orig_img_path = None # c:\album\folder.jpg
+    filename = None # folder.jpg
+    pixels = None # number of pixels in original image
+    
+    for file in FILENAMES:
         if os.path.exists(os.path.join(path, file)):
             filename = file
-            fullpath = os.path.join(path, file)
-            pixels = Image.open(fullpath).size
+            orig_img_path = os.path.join(path, file)
+            pixels = Image.open(orig_img_path).size
             pixels = pixels[0]*pixels[1]
             break
     
-    if fullpath:
+    if orig_img_path:
         print 'Searching for larger images...'
-        html = search(fullpath)
+        html = search(orig_img_path)
         
         print 'Processing search results...'
         soup = BeautifulSoup(html)
@@ -85,14 +58,14 @@ def execute():
                 pass
         
         print 'Downloading new image...'
-        os.rename(fullpath, os.path.join(path, u'Backup of ' + filename))
+        os.rename(orig_img_path, os.path.join(path, u'Backup of ' + filename))
         
         # fall-back mechanism:
         success = False
         i = 0
         while not success and i < len(urls):
             try:
-                urlretrieve(urls[i], fullpath)
+                urlretrieve(urls[i], orig_img_path)
                 success = True
             except Exception, e:
                 i += 1
@@ -104,5 +77,7 @@ def execute():
         print 'File not found.'
 
 if __name__ == '__main__':
-    sys.argv = win32_unicode_argv()
+    if 'win' in sys.platform:
+        from lib import win32_unicode_argv
+        sys.argv = win32_unicode_argv()
     execute()
