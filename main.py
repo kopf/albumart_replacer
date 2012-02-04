@@ -82,6 +82,8 @@ def execute():
                 print 'Done!'
             else:
                 print 'Exhausted URL list. Download failed.'
+                # revert changes to original file's name:
+                os.rename(os.path.join(dirpath, u'Backup of ' + filename), orig_img_fpath)
     else:
         print 'File not found.'
 
