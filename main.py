@@ -6,6 +6,9 @@ from BeautifulSoup import BeautifulSoup
 from settings import FILENAMES
 
 def search(filepath):
+    """ Query tineye with image.
+    """
+    
     url = 'http://www.tineye.com/search'
     if 'win' in sys.platform:
         filepath = filepath.encode('cp1252')
@@ -18,6 +21,9 @@ def search(filepath):
     return followed.read().strip()
 
 def execute():
+    """ Main program logic.
+    """
+    
     mp3path = sys.argv[len(sys.argv) - 1] # c:\album\01 - song.mp3
     dirpath = os.path.dirname(mp3path) # c:\album
     orig_img_fpath = None # c:\album\folder.jpg
