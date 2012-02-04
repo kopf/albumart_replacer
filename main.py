@@ -87,9 +87,22 @@ def execute():
     else:
         print 'File not found.'
 
+def print_help():
+    print '''Albumart Replacer v0.1'''
+    print '''Aengus Walton, ventolin.org'''
+    print '''==========================='''
+    print '''\nPlease run this program using a directory or file path as an argument.'''
+    print '''\nExample:'''
+    print '''%s d:\\music\\hank jones\\the oracle\\01 - interface.mp3''' % sys.argv[-1]
+    print '''or'''
+    print '''%s d:\\music\\tim hecker\\mirages''' % sys.argv[-1]
+
 if __name__ == '__main__':
     if 'win' in sys.platform:
         from lib import win32_unicode_argv
         sys.argv = win32_unicode_argv()
-    execute()
+    if '.py' in sys.argv[-1]:
+        print_help()
+    else:
+        execute()
     
