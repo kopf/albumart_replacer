@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os, sys, Image, re
 from urllib import urlretrieve
 import urllib2, MultipartPostHandler
@@ -43,21 +44,22 @@ def execute():
         
         print 'Processing search results...'
         soup = BeautifulSoup(html)
-        results = soup.findAll('div', {'class':'result-match clearfix'})
         
+        results = soup.findAll('div', {'class':'search-results-item  clearfix'})
+
         if not results:
             print '''Didn't find any matching images. Aborting.'''
             return
         
         urls = []
         for result in results:
-            pixels_span = result.find('div', {'class': 'result-match-image'}).findAll('span')[-1]
+            pixels_span = result.find('div', {'class': 'search-results-item-image'}).findAll('span')[-1]
             regexp = re.search('''(\d+)x(\d+)''', str(pixels_span))
             found_pixels = int(regexp.group(0).split('x')[0]) * int(regexp.group(0).split('x')[1])
             if found_pixels <= pixels:
                 pass
             else:
-                for block in result.findAll('div', {'class': 'location-match'}):
+                for block in result.findAll('div', {'class': 'search-results-location'}):
                     try:
                         urls.append(block.find('a')['href'])
                     except Exception, e:
@@ -88,7 +90,7 @@ def execute():
         print 'File not found.'
 
 def print_help():
-    print '''Albumart Replacer v0.1'''
+    print '''Albumart Replacer v0.2'''
     print '''Aengus Walton, ventolin.org'''
     print '''==========================='''
     print '''\nPlease run this program using a directory or file path as an argument.'''
