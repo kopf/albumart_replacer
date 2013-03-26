@@ -6,6 +6,8 @@ searches tineye.com for higher-resolution copies of an image in that directory.
 
 It is most useful for automatically finding and saving higher-res copies of album art. 
 
+See [this blog post](http://ventolin.org/2012/02/albumart-replacer/) for more information.
+
 ## Installation and Configuration
 * [Download a copy of the Master branch.](https://bitbucket.org/ventolin/albumart_replacer/get/master.zip)
 * Install the requirements:
